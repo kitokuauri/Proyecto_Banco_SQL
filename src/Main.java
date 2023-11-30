@@ -1,12 +1,24 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-Scanner sc = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in);
+		
+		String url = "jdbc:mysql://localhost:3306/banco_pruebas";
+        String usuario = "banco";
+        String contraseña = "banco";
+		
+		Gestor gestor = new Gestor(url, usuario, contraseña);
 		
 		int numero = 1;
+		
 		
 		while(numero != 0) {
 			
@@ -32,12 +44,11 @@ Scanner sc = new Scanner(System.in);
 			System.out.println("0. Finalizar");
 			System.out.println("~ ~ ~ ~ ~ ~");
 			
-			
-		numero = sc.nextInt();
+		numero = sc.nextInt();	
             
             switch (numero){
             case 1: // Insercion 1 gestor
-               
+            	gestor.insertarGestor();
                 break;
             case 2: // Insercion varios gestores
             	
@@ -95,10 +106,11 @@ Scanner sc = new Scanner(System.in);
             default:
             	System.out.println("Por favor, introduce un número válido.");	
             }
-       
+
 		} sc.close();
 		
 		System.out.println("Programa finalizado. ¡Hasta la vista!");
+		
 		
 	}
 
