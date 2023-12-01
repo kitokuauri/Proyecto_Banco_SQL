@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
 		
@@ -40,7 +40,6 @@ public class Main {
 			System.out.println("15. Obtención de una transferencia.");
 			System.out.println("16. Obtención de todas las trasferencias");
 			System.out.println("17. Envío de una transferencia.");
-			System.out.println("18. Login y registro.");
 			System.out.println("0. Finalizar");
 			System.out.println("~ ~ ~ ~ ~ ~");
 			
@@ -51,19 +50,19 @@ public class Main {
             	gestor.insertarGestor();
                 break;
             case 2: // Insercion varios gestores
-            	
+            	gestor.insertarVariosGestoresAl();
                 break;
             case 3: // Obtencion 1 gestor
-            	
+            	gestor.obtenerGestor();
                 break;
             case 4: // Obtencion todos los gestores
-                
+                gestor.obtenerTodosGestores();
                 break;
             case 5: // Actualizacion 1 gestor
-            	
+            	gestor.actualizarGestor();
                 break;
             case 6: // Eliminación 1 gestor
-            	
+            	gestor.eliminarGestor();
                 break;
             case 7: // Insercion 1 cliente
             	
