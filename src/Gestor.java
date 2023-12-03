@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
-public class Gestor extends Conexion {
+public class Gestor extends Conexion implements Metodos{
 
 	public Gestor(String url, String usuario, String contraseña) {
 		super(url, usuario, contraseña);
@@ -16,7 +16,7 @@ public class Gestor extends Conexion {
 //	métodos
 	Scanner sc = new Scanner(System.in);
 	
-	public void insertarGestor() throws SQLException {
+	public void insertar() throws SQLException {
 		String query = "INSERT INTO gestor(nombre, apellido, edad, email, salario) VALUES(?,?,?,?,1200)";
 		
 		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
@@ -42,8 +42,8 @@ public class Gestor extends Conexion {
 		instruccion.close();
 	}
 	
-	public void insertarGestorAleatorio() throws SQLException {
-		String query = "INSERT INTO gestor(nombre, apellido, edad, email, salario) VALUES(?,?,?,?,1200)";
+	public void insertarAleatorios() throws SQLException {
+		String query = "INSERT INTO gestor(nombre, apellido, edad, email, salario) VALUES(?,?,?,?,?)";
 		
 		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
 		PreparedStatement instruccion = conexion.prepareStatement(query);
@@ -51,6 +51,7 @@ public class Gestor extends Conexion {
 		instruccion.setString(2, stringAleatorio02);
 		instruccion.setInt(3, intAleatorio01);
 		instruccion.setString(4, stringAleatorio03);
+		instruccion.setInt(5, intAleatorio02);
 		if(instruccion.executeUpdate() !=1) {
 			throw new SQLException("Error en la inserción");
 		} else {
@@ -58,13 +59,14 @@ public class Gestor extends Conexion {
 		}
 		instruccion.close();
 	}
+	
 	public void insertarVariosGestoresAl() throws SQLException {
 		for(int i=0;i<4;i++) {
-            insertarGestorAleatorio();
+            insertarAleatorios();
         	}
 	}
 	
-	public void obtenerGestor() throws SQLException {
+	public void obtener() throws SQLException {
 		String query = "SELECT * FROM gestor WHERE id = ?";
 		
 		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
@@ -90,7 +92,7 @@ public class Gestor extends Conexion {
 		instruccion.close();
 	}
 	
-	public void obtenerTodosGestores() throws SQLException {
+	public void obtenerTodos() throws SQLException {
 		String query = "SELECT * FROM gestor";
 		
 		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
@@ -98,8 +100,7 @@ public class Gestor extends Conexion {
 		
 		ResultSet resultado = instruccion.executeQuery(query);
 		
-//		comprueba si el resultado está antes de la primera fila (si lo está, no hay nada en la tabla)
-		if(!resultado.isBeforeFirst()) {
+		if(!comprobarTabla()) {
 			System.out.println("No existe ningún gestor.");
 		} else {
 			System.out.println("Listado de Gestores: ");
@@ -123,48 +124,98 @@ public class Gestor extends Conexion {
 	}
 	
 	
-	public void actualizarGestor() throws SQLException {
-		String query = "UPDATE gestor SET nombre=?, apellido=?, edad=?, email=? WHERE id=?";
-		
-		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
-		PreparedStatement instruccion = conexion.prepareStatement(query);
-		System.out.println("¿Id?");
-		instruccion.setInt(5, sc.nextInt());
-		
-		System.out.println("Nombre:");
-		instruccion.setString(1,sc.next());
-		
-		System.out.println("Apellido:");
-		instruccion.setString(2,sc.next());
-		
-		System.out.println("Edad:");
-		instruccion.setInt(3,sc.nextInt());
-		
-		System.out.println("Email:");
-		instruccion.setString(4,sc.next());
-		
-		if(instruccion.executeUpdate() !=1) {
-			throw new SQLException("Error en la actualización");
+	public void actualizar() throws SQLException {
+		if(comprobarTabla()) {
+			String query = "UPDATE gestor SET id=?, nombre=?, apellido=?, edad=?, email=? WHERE id=?";
+			
+			Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
+			PreparedStatement instruccion = conexion.prepareStatement(query);
+			System.out.println("¿Id?");
+			instruccion.setInt(6, sc.nextInt());
+			
+			System.out.println("Id:");
+			id = sc.nextInt();
+			
+				if(!existeId(id)) {
+				instruccion.setInt(1,id);
+				
+				System.out.println("Nombre:");
+				instruccion.setString(2,sc.next());
+				
+				System.out.println("Apellido:");
+				instruccion.setString(3,sc.next());
+				
+				System.out.println("Edad:");
+				instruccion.setInt(4,sc.nextInt());
+				
+				System.out.println("Email:");
+				instruccion.setString(5,sc.next());
+				
+				if(instruccion.executeUpdate() !=1) {
+					throw new SQLException("Error en la actualización");
+				} else {
+					System.out.println("Gestor actualizado correctamente");
+				}
+				instruccion.close();
+			} else {
+				System.out.println("Ya existe un gestor con ese Id. El Id no puede estar repetido.");
+			}
 		} else {
-			System.out.println("Gestor actualizado correctamente");
+			System.out.println("No existe ningún gestor que actualizar.");
 		}
-		instruccion.close();
 	}
 	
-	public void eliminarGestor() throws SQLException {
-		String query = "DELETE FROM gestor WHERE id=?";
-		
-		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
-		PreparedStatement instruccion = conexion.prepareStatement(query);
-		System.out.println("¿Id?");
-		instruccion.setInt(1, sc.nextInt());
-		
-		if(instruccion.executeUpdate() !=1) {
-			throw new SQLException("Error en la eliminación");
+	public void eliminar() throws SQLException {
+		if(comprobarTabla()) {
+			String query = "DELETE FROM gestor WHERE id=?";
+			
+			Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
+			PreparedStatement instruccion = conexion.prepareStatement(query);
+			System.out.println("¿Id?");
+	
+			instruccion.setInt(1, sc.nextInt());
+			
+			if(instruccion.executeUpdate() !=1) {
+				throw new SQLException("Error en la eliminación");
+			} else {
+				System.out.println("Gestor eliminado correctamente");
+			}
+			instruccion.close();
 		} else {
-			System.out.println("Gestor eliminado correctamente");
+			System.out.println("No eciste ningún gestor que actualizar.");
 		}
-		instruccion.close();
+	}
+	
+	public boolean comprobarTabla() throws SQLException {
+		 String query = "SELECT 1 FROM gestor LIMIT 1";
+	      
+    	Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
+    		
+        PreparedStatement instruccion = conexion.prepareStatement(query);
+        ResultSet resultado = instruccion.executeQuery();
+        return resultado.next();
+        
+	}
+
+	@Override
+	public boolean existeId(int id) throws SQLException {
+		// TODO Auto-generated method stub
+		String query = "SELECT COUNT(*) FROM gestor WHERE id = ?";
+	      
+  	Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
+  		
+      PreparedStatement instruccion = conexion.prepareStatement(query);
+      instruccion.setInt(1, id);
+      
+      ResultSet resultado = instruccion.executeQuery();
+      		
+      if (resultado.next()) {
+          int count = resultado.getInt(1);
+          instruccion.close();
+          return count > 0;
+	    } else {
+	    	return false;
+	    }
 	}
 	
 	

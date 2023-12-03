@@ -16,6 +16,9 @@ public class Main {
         String contraseña = "banco";
 		
 		Gestor gestor = new Gestor(url, usuario, contraseña);
+		Cliente cliente = new Cliente(url, usuario, contraseña);
+		Mensaje mensaje = new Mensaje(url, usuario, contraseña);
+		Transferencia transferencia = new Transferencia(url, usuario, contraseña);
 		
 		int numero = 1;
 		
@@ -47,58 +50,55 @@ public class Main {
             
             switch (numero){
             case 1: // Insercion 1 gestor
-            	gestor.insertarGestor();
+            	gestor.insertar();
                 break;
             case 2: // Insercion varios gestores
             	gestor.insertarVariosGestoresAl();
                 break;
             case 3: // Obtencion 1 gestor
-            	gestor.obtenerGestor();
+            	gestor.obtener();
                 break;
             case 4: // Obtencion todos los gestores
-                gestor.obtenerTodosGestores();
+                gestor.obtenerTodos();
                 break;
             case 5: // Actualizacion 1 gestor
-            	gestor.actualizarGestor();
+            	gestor.actualizar();
                 break;
             case 6: // Eliminación 1 gestor
-            	gestor.eliminarGestor();
+            	gestor.eliminar();
                 break;
             case 7: // Insercion 1 cliente
-            	
+            	cliente.insertar();
                 break;
             case 8: // Obtencion 1 cliente
-            	
+            	cliente.obtener();
             	break;
             case 9: // Obtencion todos los clientes
-            	  
+            	 cliente.obtenerTodos();
             	break;
             case 10: // Actualizacion 1 Cliente
-            	
+            	cliente.actualizar();
             	break;
             case 11: // Eliminación 1 Cliente
-            	
+            	cliente.eliminar();
             	break;
             case 12: // Obtencion 1 mensaje
-            	
+            	mensaje.obtener();
             	break;
             case 13: // Obtencion todos los mensajes
-            	
+            	mensaje.obtenerTodos();
             	break;
             case 14: // Envio 1 mensaje
-              
+            	mensaje.insertar();
                 break;
             case 15: // Obtencion 1 transferencia
-            	
+            	transferencia.obtener();
             	break;
             case 16: // Obtencion todas las transferencias
-            	
+            	transferencia.obtenerTodos();
             	break;
             case 17: // Envio 1 transferencia
-            
-            	break;
-            case 18: // Login y Registro
-            	
+            	transferencia.insertar();
             	break;
             case 0:
             	break;
