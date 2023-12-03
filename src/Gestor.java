@@ -8,10 +8,8 @@ import java.util.Scanner;
 
 public class Gestor extends Conexion implements Metodos{
 
-	public Gestor(String url, String usuario, String contraseña) {
-		super(url, usuario, contraseña);
+	public Gestor() {
 	}
-	
 	
 //	métodos
 	Scanner sc = new Scanner(System.in);
@@ -123,6 +121,31 @@ public class Gestor extends Conexion implements Metodos{
 		instruccion.close();
 	}
 	
+	public void obtenerTodosReducido() throws SQLException {
+		String query = "SELECT id, nombre, apellido FROM gestor";
+		
+		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
+		Statement instruccion = conexion.createStatement();	
+		
+		ResultSet resultado = instruccion.executeQuery(query);
+		
+		if(!comprobarTabla()) {
+			System.out.println("No existe ningún gestor.");
+		} else {
+			System.out.println("Listado de Gestores: ");
+			
+			while(resultado.next()) {
+				System.out.println("Gestor " + resultado.getInt("id"));
+				
+				System.out.println("Nombre y apellidos: " + resultado.getString("nombre") + " " + resultado.getString("apellido"));
+				
+				System.out.println("...");
+			}
+		}
+		resultado.close();
+		instruccion.close();
+	}
+	
 	
 	public void actualizar() throws SQLException {
 		if(comprobarTabla()) {
@@ -202,17 +225,17 @@ public class Gestor extends Conexion implements Metodos{
 		// TODO Auto-generated method stub
 		String query = "SELECT COUNT(*) FROM gestor WHERE id = ?";
 	      
-  	Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
+		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
   		
-      PreparedStatement instruccion = conexion.prepareStatement(query);
-      instruccion.setInt(1, id);
+		PreparedStatement instruccion = conexion.prepareStatement(query);
+		instruccion.setInt(1, id);
       
-      ResultSet resultado = instruccion.executeQuery();
+		ResultSet resultado = instruccion.executeQuery();
       		
-      if (resultado.next()) {
+		if (resultado.next()) {
           int count = resultado.getInt(1);
           instruccion.close();
-          return count > 0;
+          return count >= 1;
 	    } else {
 	    	return false;
 	    }

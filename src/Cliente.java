@@ -7,9 +7,10 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class Cliente extends Conexion implements Metodos {
+	
+	Gestor gestor = new Gestor();
 
-	public Cliente(String url, String usuario, String contraseña) {
-		super(url, usuario, contraseña);
+	public Cliente() {
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -19,52 +20,39 @@ public class Cliente extends Conexion implements Metodos {
 	@Override
 	public void insertar() throws SQLException {
 		// TODO Auto-generated method stub
-		if(existeGestorId1()) {
-//		El id de gestor por defecto es 1 porque tienen que estar ligado a un gestor existente
-		String query = "INSERT INTO cliente(id_gestor, nombre, apellido, edad, email) VALUES(1,?,?,?,?)";
+		String query = "INSERT INTO cliente(id_gestor, nombre, apellido, edad, email) VALUES(?,?,?,?,?)";
 		
 		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
 		PreparedStatement instruccion = conexion.prepareStatement(query);
 		
-		System.out.println("Nombre:");
-		instruccion.setString(1,sc.next());
-		
-		System.out.println("Apellido:");
-		instruccion.setString(2,sc.next());
-		
-		System.out.println("Edad:");
-		instruccion.setInt(3,sc.nextInt());
-		
-		System.out.println("Email:");
-		instruccion.setString(4,sc.next());
-		
-		if(instruccion.executeUpdate() !=1) {
-			throw new SQLException("Error en la inserción");
-		} else {
-			System.out.println("Cliente añadido correctamente");
+		System.out.println("Id Gestor:");
+		gestor.obtenerTodosReducido();
+		id = sc.nextInt();
+
+		if(gestor.existeId(id)) {
+			instruccion.setInt(1,id);
+			
+			System.out.println("Nombre:");
+			instruccion.setString(2,sc.next());
+			
+			System.out.println("Apellido:");
+			instruccion.setString(3,sc.next());
+			
+			System.out.println("Edad:");
+			instruccion.setInt(4,sc.nextInt());
+			
+			System.out.println("Email:");
+			instruccion.setString(5,sc.next());
+			
+			if(instruccion.executeUpdate() !=1) {
+				throw new SQLException("Error en la inserción");
+			} else {
+				System.out.println("Cliente añadido correctamente");
+			}
+			instruccion.close();
+		}else {
+			System.out.println("No existe ningún gestor con ese id.");
 		}
-		instruccion.close();
-		} else {
-			System.out.println("No existe un gestor con id=1. La inserción no se puede realizar.");
-		}
-	}
-	
-	public boolean existeGestorId1() throws SQLException {
-	    String query = "SELECT COUNT(*) FROM gestor WHERE id = 1";
-	      
-    	Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
-    		
-        PreparedStatement instruccion = conexion.prepareStatement(query);
-        ResultSet resultado = instruccion.executeQuery();
-        		
-        if (resultado.next()) {
-            int count = resultado.getInt(1);
-            instruccion.close();
-            return count > 0;
-	    } else {
-	    	return false;
-	    }
-        
 	}
 
 	@Override
@@ -132,12 +120,12 @@ public class Cliente extends Conexion implements Metodos {
 	public void actualizar() throws SQLException {
 		// TODO Auto-generated method stub
 		if(comprobarTabla()) {
-			String query = "UPDATE cliente SET id=?, nombre=?, apellido=?, edad=?, email=? WHERE id=?";
+			String query = "UPDATE cliente SET id=?, id_gestor=?, nombre=?, apellido=?, edad=?, email=? WHERE id=?";
 			
 			Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
 			PreparedStatement instruccion = conexion.prepareStatement(query);
 			System.out.println("¿Id?");
-			instruccion.setInt(6, sc.nextInt());
+			instruccion.setInt(7, sc.nextInt());
 				
 			System.out.println("Id:");
 			id = sc.nextInt();
@@ -145,24 +133,34 @@ public class Cliente extends Conexion implements Metodos {
 				if(!existeId(id)) {
 				instruccion.setInt(1,id);
 				
-				System.out.println("Nombre:");
-				instruccion.setString(2,sc.next());
-				
-				System.out.println("Apellido:");
-				instruccion.setString(3,sc.next());
-				
-				System.out.println("Edad:");
-				instruccion.setInt(4,sc.nextInt());
-				
-				System.out.println("Email:");
-				instruccion.setString(5,sc.next());
-				
-				if(instruccion.executeUpdate() !=1) {
-					throw new SQLException("Error en la actualización");
-				} else {
-					System.out.println("Cliente actualizado correctamente");
+				System.out.println("Id Gestor:");
+				gestor.obtenerTodosReducido();
+				id = sc.nextInt();
+
+				if(gestor.existeId(id)) {
+					instruccion.setInt(2,id);
+					
+					System.out.println("Nombre:");
+					instruccion.setString(3,sc.next());
+					
+					System.out.println("Apellido:");
+					instruccion.setString(4,sc.next());
+					
+					System.out.println("Edad:");
+					instruccion.setInt(5,sc.nextInt());
+					
+					System.out.println("Email:");
+					instruccion.setString(6,sc.next());
+					
+					if(instruccion.executeUpdate() !=1) {
+						throw new SQLException("Error en la actualización");
+					} else {
+						System.out.println("Cliente actualizado correctamente");
+					}
+					instruccion.close();
+				}else {
+					System.out.println("No existe un gestor con ese Id. Intentelo de nuevo.");
 				}
-				instruccion.close();
 			} else {
 				System.out.println("Ya existe un cliente con ese Id. El Id no puede estar repetido.");
 			}
@@ -221,10 +219,12 @@ public class Cliente extends Conexion implements Metodos {
 	        if (resultado.next()) {
 	            int count = resultado.getInt(1);
 	            instruccion.close();
-	            return count > 0;
+	            return count >= 1;
 		    } else {
 		    	return false;
 		    }
 	}
+	
+	
 
 }

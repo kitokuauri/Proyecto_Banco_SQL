@@ -8,8 +8,7 @@ import java.util.Scanner;
 
 public class Transferencia extends Conexion implements Metodos {
 
-	public Transferencia(String url, String usuario, String contraseña) {
-		super(url, usuario, contraseña);
+	public Transferencia() {
 		// TODO Auto-generated constructor stub
 	}
 	

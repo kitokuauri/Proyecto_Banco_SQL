@@ -11,14 +11,10 @@ public class Main {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
 		
-		String url = "jdbc:mysql://localhost:3306/banco_pruebas";
-        String usuario = "banco";
-        String contraseña = "banco";
-		
-		Gestor gestor = new Gestor(url, usuario, contraseña);
-		Cliente cliente = new Cliente(url, usuario, contraseña);
-		Mensaje mensaje = new Mensaje(url, usuario, contraseña);
-		Transferencia transferencia = new Transferencia(url, usuario, contraseña);
+		Gestor gestor = new Gestor();
+		Cliente cliente = new Cliente();
+		Mensaje mensaje = new Mensaje();
+		Transferencia transferencia = new Transferencia();
 		
 		int numero = 1;
 		

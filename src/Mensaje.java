@@ -8,8 +8,7 @@ import java.util.Scanner;
 
 public class Mensaje extends Conexion implements Metodos{
 
-	public Mensaje(String url, String usuario, String contraseña) {
-		super(url, usuario, contraseña);
+	public Mensaje() {
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -19,34 +18,33 @@ public class Mensaje extends Conexion implements Metodos{
 	@Override
 	public void insertar() throws SQLException {
 		// TODO Auto-generated method stub
-		if(existeId(1)) {
-//			El id de remitente y destinatario por defecto son 1 porque tienen que estar ligado a un cliente existente
-			String query = "INSERT INTO mensaje(id_remitente, id_destinatario, remitente, destinatario, fecha, mensaje) VALUES(1,1,?,?,?,?)";
-			
-			Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
-			PreparedStatement instruccion = conexion.prepareStatement(query);
-			
-			System.out.println("Remitente:");
-			instruccion.setString(1,sc.next());
-			
-			System.out.println("Destinatario:");
-			instruccion.setString(2,sc.next());
-			
-			System.out.println("Fecha (en formato yyyy-mm-dd):");
-			instruccion.setDate(3, recibirFecha());
-			
-			System.out.println("Mensaje:");
-			instruccion.setString(4,sc.next());
-			
-			if(instruccion.executeUpdate() !=1) {
-				throw new SQLException("Error en la inserción");
-			} else {
-				System.out.println("Mensaje enviado correctamente");
-			}
-			instruccion.close();
+		String query = "INSERT INTO mensaje(id_remitente, id_destinatario, remitente, destinatario, fecha, mensaje) VALUES(?,?,?,?,?,?)";
+		
+		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
+		PreparedStatement instruccion = conexion.prepareStatement(query);
+		
+		System.out.println("Remitente:");
+		instruccion.setString(1,sc.next());
+		
+		System.out.println("Id Remitente:");
+		
+		System.out.println("Destinatario:");
+		instruccion.setString(2,sc.next());
+		
+		System.out.println("Id Destinatario:");
+		
+		System.out.println("Fecha (en formato yyyy-mm-dd):");
+		instruccion.setDate(3, recibirFecha());
+		
+		System.out.println("Mensaje:");
+		instruccion.setString(4,sc.next());
+		
+		if(instruccion.executeUpdate() !=1) {
+			throw new SQLException("Error en la inserción");
 		} else {
-			 System.out.println("No existe un cliente con id = 1. La inserción no se puede realizar.");
+			System.out.println("Mensaje enviado correctamente");
 		}
+		instruccion.close();
 	}
 	
 	public boolean existeId(int id) throws SQLException {

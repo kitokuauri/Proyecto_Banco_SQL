@@ -7,10 +7,10 @@ import java.util.Scanner;
 
 public class Conexion {
 
-	public Conexion(String url, String usuario, String contraseña) {
-		this.url=url;
-		this.usuario=usuario;
-		this.contraseña=contraseña;
+	public Conexion() {
+		this.url="jdbc:mysql://localhost:3306/banco_pruebas";
+		this.usuario="banco";
+		this.contraseña="banco";
 	}
 	
 //	atributos
@@ -22,6 +22,7 @@ public class Conexion {
 	protected String contraseña;
 	
 	protected int id;
+	protected int id2;
 	
 	protected int intAleatorio01 = aleatorio.nextInt(100);
 	protected int intAleatorio02 = aleatorio.nextInt(3000);
