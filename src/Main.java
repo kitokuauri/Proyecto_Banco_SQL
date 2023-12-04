@@ -51,7 +51,9 @@ public class Main {
             	gestor.insertarGestor();
                 break;
             case 2: // Insercion varios gestores
-            	
+            	for(int i=0;i<4;i++) {
+            		gestor.insertarGestoresAleatorios();
+            	}
                 break;
             case 3: // Obtencion 1 gestor
             	
@@ -63,7 +65,7 @@ public class Main {
             	
                 break;
             case 6: // Eliminación 1 gestor
-            	
+            	gestor.eliminarGestor();
                 break;
             case 7: // Insercion 1 cliente
             	
