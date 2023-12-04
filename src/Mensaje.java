@@ -20,46 +20,50 @@ public class Mensaje extends Conexion implements Metodos{
 	@Override
 	public void insertar() throws SQLException {
 		// TODO Auto-generated method stub
-		String query = "INSERT INTO mensaje(id_remitente, id_destinatario, remitente, destinatario, fecha, mensaje) VALUES(?,?,?,?,?,?)";
-		
-		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
-		PreparedStatement instruccion = conexion.prepareStatement(query);
-		
-		System.out.println("Remitente:");
-		instruccion.setString(3,sc.next());
-		
-		System.out.println("Id Remitente:");
-		cliente.obtenerTodosReducido();
-		id = sc.nextInt();
-		if(cliente.existeId(id)) {
-			instruccion.setInt(1,id);
+		if(cliente.comprobarTabla()) {
+			String query = "INSERT INTO mensaje(id_remitente, id_destinatario, remitente, destinatario, fecha, mensaje) VALUES(?,?,?,?,?,?)";
 			
-			System.out.println("Destinatario:");
-			instruccion.setString(4,sc.next());
+			Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
+			PreparedStatement instruccion = conexion.prepareStatement(query);
 			
-			System.out.println("Id Destinatario:");
+			System.out.println("Remitente:");
+			instruccion.setString(3,sc.next());
+			
+			System.out.println("Id Remitente:");
 			cliente.obtenerTodosReducido();
 			id = sc.nextInt();
 			if(cliente.existeId(id)) {
-				instruccion.setInt(2,id);
+				instruccion.setInt(1,id);
 				
-				System.out.println("Fecha (en formato yyyy-mm-dd):");
-				instruccion.setDate(5, recibirFecha());
+				System.out.println("Destinatario:");
+				instruccion.setString(4,sc.next());
 				
-				System.out.println("Mensaje:");
-				instruccion.setString(6,sc.next());
-				
-				if(instruccion.executeUpdate() !=1) {
-					throw new SQLException("Error en la inserción");
+				System.out.println("Id Destinatario:");
+				cliente.obtenerTodosReducido();
+				id = sc.nextInt();
+				if(cliente.existeId(id)) {
+					instruccion.setInt(2,id);
+					
+					System.out.println("Fecha (en formato yyyy-mm-dd):");
+					instruccion.setDate(5, recibirFecha());
+					
+					System.out.println("Mensaje:");
+					instruccion.setString(6,sc.next());
+					
+					if(instruccion.executeUpdate() !=1) {
+						throw new SQLException("Error en la inserción");
+					} else {
+						System.out.println("Mensaje enviado correctamente");
+					}
+					instruccion.close();
 				} else {
-					System.out.println("Mensaje enviado correctamente");
+					System.out.println("No existe ningún cliente con ese Id.");
 				}
-				instruccion.close();
 			} else {
 				System.out.println("No existe ningún cliente con ese Id.");
 			}
 		} else {
-			System.out.println("No existe ningún cliente con ese Id.");
+			System.out.println("Inserte primero algún cliente.");
 		}
 	}
 
@@ -153,6 +157,33 @@ public class Mensaje extends Conexion implements Metodos{
 	public boolean existeId(int id) throws SQLException {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void obtenerTodosReducido() throws SQLException {
+		// TODO Auto-generated method stub
+		String query = "SELECT * FROM mensaje";
+		
+		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
+		Statement instruccion = conexion.createStatement();	
+		
+		ResultSet resultado = instruccion.executeQuery(query);
+		
+		if(!comprobarTabla()) {
+			System.out.println("No existe ningún mensaje.");
+		} else {
+			System.out.println("Listado de Mensajes: ");
+			
+			while(resultado.next()) {
+				System.out.println("Mensaje " + resultado.getInt("id"));
+				
+				System.out.println("Mensaje: " + resultado.getString("mensaje"));
+				
+				System.out.println("...");
+			}
+		}
+		resultado.close();
+		instruccion.close();
 	}
 
 }

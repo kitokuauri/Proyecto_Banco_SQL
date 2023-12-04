@@ -9,5 +9,6 @@ public interface Metodos {
 	public abstract void eliminar() throws SQLException ;
 	public abstract boolean comprobarTabla() throws SQLException;
 	public abstract boolean existeId(int id) throws SQLException;
+	public void obtenerTodosReducido() throws SQLException;
 	
 }

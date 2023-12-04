@@ -154,34 +154,39 @@ public class Gestor extends Conexion implements Metodos{
 			Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
 			PreparedStatement instruccion = conexion.prepareStatement(query);
 			System.out.println("¿Id?");
-			instruccion.setInt(6, sc.nextInt());
-			
-			System.out.println("Id:");
 			id = sc.nextInt();
-			
-				if(!existeId(id)) {
-				instruccion.setInt(1,id);
+			if(existeId(id)) {
+				instruccion.setInt(6, id);
 				
-				System.out.println("Nombre:");
-				instruccion.setString(2,sc.next());
+				System.out.println("Id:");
+				id = sc.nextInt();
 				
-				System.out.println("Apellido:");
-				instruccion.setString(3,sc.next());
-				
-				System.out.println("Edad:");
-				instruccion.setInt(4,sc.nextInt());
-				
-				System.out.println("Email:");
-				instruccion.setString(5,sc.next());
-				
-				if(instruccion.executeUpdate() !=1) {
-					throw new SQLException("Error en la actualización");
+					if(!existeId(id)) {
+					instruccion.setInt(1,id);
+					
+					System.out.println("Nombre:");
+					instruccion.setString(2,sc.next());
+					
+					System.out.println("Apellido:");
+					instruccion.setString(3,sc.next());
+					
+					System.out.println("Edad:");
+					instruccion.setInt(4,sc.nextInt());
+					
+					System.out.println("Email:");
+					instruccion.setString(5,sc.next());
+					
+					if(instruccion.executeUpdate() !=1) {
+						throw new SQLException("Error en la actualización");
+					} else {
+						System.out.println("Gestor actualizado correctamente");
+					}
+					instruccion.close();
 				} else {
-					System.out.println("Gestor actualizado correctamente");
+					System.out.println("Ya existe un gestor con ese Id. El Id no puede estar repetido.");
 				}
-				instruccion.close();
-			} else {
-				System.out.println("Ya existe un gestor con ese Id. El Id no puede estar repetido.");
+			}else {
+				System.out.println("El gestor escogido no existe.");
 			}
 		} else {
 			System.out.println("No existe ningún gestor que actualizar.");
@@ -196,16 +201,21 @@ public class Gestor extends Conexion implements Metodos{
 			PreparedStatement instruccion = conexion.prepareStatement(query);
 			System.out.println("¿Id?");
 	
-			instruccion.setInt(1, sc.nextInt());
-			
-			if(instruccion.executeUpdate() !=1) {
-				throw new SQLException("Error en la eliminación");
+			id = sc.nextInt();
+			if(existeId(id)) {
+				instruccion.setInt(1, id);
+				
+				if(instruccion.executeUpdate() !=1) {
+					throw new SQLException("Error en la eliminación");
+				} else {
+					System.out.println("Gestor eliminado correctamente");
+				}
+				instruccion.close();
 			} else {
-				System.out.println("Gestor eliminado correctamente");
+				System.out.println("El gestor escogido no existe.");
 			}
-			instruccion.close();
 		} else {
-			System.out.println("No eciste ningún gestor que actualizar.");
+			System.out.println("No existe ningún gestor que actualizar.");
 		}
 	}
 	
