@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class Transferencia extends Conexion implements Metodos {
+	
+	Cliente cliente = new Cliente();
 
 	public Transferencia() {
 		// TODO Auto-generated constructor stub
@@ -18,52 +20,44 @@ public class Transferencia extends Conexion implements Metodos {
 	@Override
 	public void insertar() throws SQLException {
 		// TODO Auto-generated method stub
-		if(existeId(1)) {
-//		El id de remitente y destinatario por defecto son 1 porque tienen que estar ligado a un cliente existente
-		String query = "INSERT INTO transferencia(id_remitente, id_destinatario, remitente, destinatario, fecha, cantidad) VALUES(1,1,?,?,?,?)";
+		String query = "INSERT INTO transferencia(id_remitente, id_destinatario, remitente, destinatario, fecha, cantidad) VALUES(?,?,?,?,?,?)";
 		
 		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
 		PreparedStatement instruccion = conexion.prepareStatement(query);
 		
-		System.out.println("Remitente:");
-		instruccion.setString(1,sc.next());
+		System.out.println("Id Remitente:");
+		cliente.obtenerTodosReducido();
+		id = sc.nextInt();
+		if(cliente.existeId(id)) {
+			instruccion.setInt(1,id);
+			
+			System.out.println("Destinatario:");
+			instruccion.setString(4,sc.next());
+			
+			System.out.println("Id Destinatario:");
+			cliente.obtenerTodosReducido();
+			id = sc.nextInt();
+			if(cliente.existeId(id)) {
+				instruccion.setInt(2,id);
 		
-		System.out.println("Destinatario:");
-		instruccion.setString(2,sc.next());
-		
-		System.out.println("Fecha (en formato yyyy-mm-dd):");
-		instruccion.setDate(3, recibirFecha());
-		
-		System.out.println("Cantidad:");
-		instruccion.setDouble(4,sc.nextDouble());
-		
-		if(instruccion.executeUpdate() !=1) {
-			throw new SQLException("Error en la inserción");
-		} else {
-			System.out.println("Transferencia enviada correctamente");
+				System.out.println("Fecha (en formato yyyy-mm-dd):");
+				instruccion.setDate(3, recibirFecha());
+				
+				System.out.println("Cantidad:");
+				instruccion.setDouble(4,sc.nextDouble());
+				
+				if(instruccion.executeUpdate() !=1) {
+					throw new SQLException("Error en la inserción");
+				} else {
+					System.out.println("Transferencia enviada correctamente");
+				}
+				instruccion.close();
+			}else {
+				System.out.println("No existe ningún cliente con ese Id.");
+			}
+		}else {
+			System.out.println("No existe ningún cliente con ese Id.");
 		}
-		instruccion.close();
-		} else {
-			System.out.println("No existe un cliente con id = 1. La inserción no se puede realizar.");
-		}
-	}
-	
-	public boolean existeId(int id) throws SQLException {
-	    String query = "SELECT COUNT(*) FROM cliente WHERE id = 1";
-	      
-    	Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
-    		
-        PreparedStatement instruccion = conexion.prepareStatement(query);
-        ResultSet resultado = instruccion.executeQuery();
-        		
-        if (resultado.next()) {
-            int count = resultado.getInt(1);
-            instruccion.close();
-            return count > 0;
-	    } else {
-	    	return false;
-	    }
-        
 	}
 
 	@Override
@@ -150,6 +144,12 @@ public class Transferencia extends Conexion implements Metodos {
 	        ResultSet resultado = instruccion.executeQuery();
 	        return resultado.next();
 	        
+	}
+
+	@Override
+	public boolean existeId(int id) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

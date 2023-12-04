@@ -51,7 +51,7 @@ public class Cliente extends Conexion implements Metodos {
 			}
 			instruccion.close();
 		}else {
-			System.out.println("No existe ningún gestor con ese id.");
+			System.out.println("No existe ningún gestor con ese Id.");
 		}
 	}
 
@@ -115,6 +115,34 @@ public class Cliente extends Conexion implements Metodos {
 		resultado.close();
 		instruccion.close();
 	}
+	
+	public void obtenerTodosReducido() throws SQLException {
+		// TODO Auto-generated method stub
+		String query = "SELECT * FROM cliente";
+		
+		Connection conexion = DriverManager.getConnection(url, usuario, contraseña);
+		Statement instruccion = conexion.createStatement();	
+		
+		ResultSet resultado = instruccion.executeQuery(query);
+		
+		if(!comprobarTabla()) {
+			System.out.println("No existe ningún cliente.");
+		} else {
+			System.out.println("Listado de Clientes: ");
+			
+			while(resultado.next()) {
+				System.out.println("Cliente " + resultado.getInt("id"));
+				
+				System.out.println("Id del Gestor: " + resultado.getInt("id_gestor"));
+				
+				System.out.println("Nombre y apellidos: " + resultado.getString("nombre") + " " + resultado.getString("apellido"));
+				
+				System.out.println("...");
+			}
+		}
+		resultado.close();
+		instruccion.close();
+	}
 
 	@Override
 	public void actualizar() throws SQLException {
@@ -159,7 +187,7 @@ public class Cliente extends Conexion implements Metodos {
 					}
 					instruccion.close();
 				}else {
-					System.out.println("No existe un gestor con ese Id. Intentelo de nuevo.");
+					System.out.println("No existe un gestor con ese Id.");
 				}
 			} else {
 				System.out.println("Ya existe un cliente con ese Id. El Id no puede estar repetido.");
