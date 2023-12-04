@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Conexion {
 
 	public Conexion() {
-		this.url="jdbc:mysql://localhost:3306/banco_pruebas";
+		this.url="jdbc:mysql://localhost:3306/banco_final";
 		this.usuario="banco";
 		this.contraseña="banco";
 	}
