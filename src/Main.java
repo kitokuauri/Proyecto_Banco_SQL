@@ -1,21 +1,16 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Scanner;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
 		
-		String url = "jdbc:mysql://localhost:3306/banco_pruebas";
-        String usuario = "banco";
-        String contraseña = "banco";
-		
-		Gestor gestor = new Gestor(url, usuario, contraseña);
+		Gestor gestor = new Gestor();
+		Cliente cliente = new Cliente();
+		Mensaje mensaje = new Mensaje();
+		Transferencia transferencia = new Transferencia();
 		
 		int numero = 1;
 		
@@ -40,7 +35,6 @@ public class Main {
 			System.out.println("15. Obtención de una transferencia.");
 			System.out.println("16. Obtención de todas las trasferencias");
 			System.out.println("17. Envío de una transferencia.");
-			System.out.println("18. Login y registro.");
 			System.out.println("0. Finalizar");
 			System.out.println("~ ~ ~ ~ ~ ~");
 			
@@ -48,60 +42,65 @@ public class Main {
             
             switch (numero){
             case 1: // Insercion 1 gestor
-            	gestor.insertarGestor();
+            	gestor.insertar();
                 break;
             case 2: // Insercion varios gestores
+<<<<<<< HEAD
             	for(int i=0;i<4;i++) {
             		gestor.insertarGestoresAleatorios();
             	}
+=======
+            	gestor.insertarVariosGestoresAl();
+>>>>>>> 0738cf23e22373fa0051b927beb6b1cad645b0c9
                 break;
             case 3: // Obtencion 1 gestor
-            	
+            	gestor.obtener();
                 break;
             case 4: // Obtencion todos los gestores
-                
+                gestor.obtenerTodos();
                 break;
             case 5: // Actualizacion 1 gestor
-            	
+            	gestor.actualizar();
                 break;
             case 6: // Eliminación 1 gestor
+<<<<<<< HEAD
             	gestor.eliminarGestor();
+=======
+            	gestor.eliminar();
+>>>>>>> 0738cf23e22373fa0051b927beb6b1cad645b0c9
                 break;
             case 7: // Insercion 1 cliente
-            	
+            	cliente.insertar();
                 break;
             case 8: // Obtencion 1 cliente
-            	
+            	cliente.obtener();
             	break;
             case 9: // Obtencion todos los clientes
-            	  
+            	 cliente.obtenerTodos();
             	break;
             case 10: // Actualizacion 1 Cliente
-            	
+            	cliente.actualizar();
             	break;
             case 11: // Eliminación 1 Cliente
-            	
+            	cliente.eliminar();
             	break;
             case 12: // Obtencion 1 mensaje
-            	
+            	mensaje.obtener();
             	break;
             case 13: // Obtencion todos los mensajes
-            	
+            	mensaje.obtenerTodos();
             	break;
             case 14: // Envio 1 mensaje
-              
+            	mensaje.insertar();
                 break;
             case 15: // Obtencion 1 transferencia
-            	
+            	transferencia.obtener();
             	break;
             case 16: // Obtencion todas las transferencias
-            	
+            	transferencia.obtenerTodos();
             	break;
             case 17: // Envio 1 transferencia
-            
-            	break;
-            case 18: // Login y Registro
-            	
+            	transferencia.insertar();
             	break;
             case 0:
             	break;
